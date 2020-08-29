@@ -1,13 +1,35 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+  <div class="jumbotron">
+    <div class="container">
+      <div class="row">
+        Hello
+        <div v-if="alert.message"></div>
+        <router-view></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import {mapState, mapActions} from 'vuex'
+
 export default {
-  name: 'App'
+  name: 'App',
+  computed: {
+    ...mapState({
+      alert: state => state.alert
+    })
+  },
+  methods: {
+    ...mapActions({
+      clearAlert : 'alert/clear'
+    })
+  },
+  watch: {
+    $route (to,from){
+      this.clearAlert()
+    }
+  }
 }
 </script>
 

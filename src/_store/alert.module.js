@@ -5,7 +5,13 @@ const state = {
 
 const actions = {
   success({commit}, message){
-    commit()
+    commit('success', message)
+  },
+  error({commit}, message){
+    commit('error', message)
+  },
+  clear({commit}) {
+    commit('clear');
   }
 }
 
@@ -25,7 +31,7 @@ const mutations = {
 
 }
 
-export const account = {
+export const alert = {
   namespaced: true,
   state,
   actions,

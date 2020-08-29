@@ -6,8 +6,24 @@ const state = {
 
 const actions = {
   getAll({commit}){
-    commit()
+    commit('getAllRequest');
+
+    userService.getAll().then(
+      users => commit('getAllSuccess',users),
+      error => commit('getAllFailure',error)
+    )
+  },
+
+  delete({commit}, id){
+    commit('deleteRequest',id);
+
+    userService.delete(id)
+      .then(
+        user => commit('deleteSuccess', id),
+        error => commit('deleteFailure', { id, error: error.toString()})
+      )
   }
+
 }
 
 const mutations = {
@@ -22,6 +38,7 @@ const mutations = {
   },
   deleteRequest(state,id){
     state.all.items = state.all.items.map(user =>
+      //add deleting to user
       user.id === id
         ? {...user, deleting: true}
         : user
@@ -31,10 +48,24 @@ const mutations = {
     state.all.items = state.all.items.filter(user => user.id !== id)
   },
   deleteFailure(state, {id,error}){
-    state.all.items = state.all.items
+    state.all.items = state.all.items.map(user => {
+      if (user.id === id ){
+        //make a copy of user without 'deleting : true'
+        const {deleting, ...userCopy} = user
+        //return
+        return {...userCopy, deleteError: error}
+      }
 
+      return user
+    })
   }
 }
 
+export const users = {
+  namespaced: true,
+  state,
+  actions,
+  mutations
+}
 
 
