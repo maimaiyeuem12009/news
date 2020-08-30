@@ -46,6 +46,7 @@ const mutations = {
     state.topic = {loading : true}
   },
   getTopicSuccess(state, news){
+    console.log(news[0])
     state.topic = {articles : news}
   },
   getTopicFailure(state, error){
